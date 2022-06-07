@@ -63,13 +63,13 @@ def update_data():
 	label4['textvariable'] = var4.set('wind: ' + str(dict['wind']['speed']) + 'm/h')
     
 def show_error():
-	label1.configure(text = 'Zay Zay')
+	label1['textvariable'] = var1.set('Zay Zay')
 
-	label2.configure(text = 'Zart Zort Celcius')
+	label2['textvariable'] = var2.set('Zart Zort Celcius')
 
-	label3.configure(text = 'Neterseng qadang alem')
+	label3['textvariable'] = var3.set('Neterseng qadang alem')
 
-	label4.configure(text = 'wind: Niye bele oluuuur ? m/h')
+	label4['textvariable'] = var4.set('Niye bele oluuuur ? m/h')
 	
 	
 	
