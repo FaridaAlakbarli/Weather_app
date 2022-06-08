@@ -13,10 +13,20 @@ dict = {}
 root = Tk()
 root.geometry('300x200')
 
+label = Label(root, text = 'Enter location: ')
+label.grid(row = 4, column = 0)
+
+var = StringVar()
+entry = Entry(root, textvariable = var)
+entry.grid(row = 4, column = 1)
 	
-def get_data():
+def get_data(event):
 	try:
-		weather_data =requests.get('https://api.openweathermap.org/data/2.5/weather?q=Baku&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric').json()
+		dic = {1:'Baku', 2:'Seattle'}
+		string = entry.get()
+		entry.delete(0,len(string))
+		if string in dic.values():
+			weather_data =requests.get('https://api.openweathermap.org/data/2.5/weather?q={}&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric'.format(string)).json()
 	 
 		for i in list:
 			dict[i] = weather_data[i]
@@ -31,6 +41,8 @@ var1 = StringVar(value = 'loading')
 var2 = StringVar(value = 'loading')	
 var3 = StringVar(value = 'loading')	
 var4 = StringVar(value = 'loading')	
+
+
 
 label1 = Label(root, textvariable = var1, bd = 10, bg = '#baf0f7', font = ('Arial', 20))
 label1.grid(row=0, column=0)
@@ -72,8 +84,7 @@ def show_error():
 	label4['textvariable'] = var4.set('Niye bele oluuuur ? m/h')
 	
 	
-	
-get_data()
+entry.bind('<Return>', get_data)
 
 
 root.mainloop()
