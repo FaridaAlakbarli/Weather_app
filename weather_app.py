@@ -39,41 +39,42 @@ entry = Entry(root, textvariable = var)
 entry.grid(row = 4, column = 1)
 
 with open ('weather.txt', 'r') as f:
-	f1 = f.readline()
-	dict1 = requests.get('https://api.openweathermap.org/data/2.5/weather?q={}&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric'.format(f1)).json()
-	 
+	try:
+		f1 = f.readline()
+		dict1 = requests.get('https://api.openweathermap.org/data/2.5/weather?q={}&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric'.format(f1)).json()
+		 
 
-	iconurl1 = 'http://openweathermap.org/img/wn/' + dict1['weather'][0]['icon'] +'@2x.png'	
+		iconurl1 = 'http://openweathermap.org/img/wn/' + dict1['weather'][0]['icon'] +'@2x.png'	
+			
+		response1 = requests.get(iconurl1)
+		img1 = Image.open(BytesIO(response1.content)).resize((40, 40))
+		img21 = ImageTk.PhotoImage(img1)
+			
+		label1['textvariable'] = var1.set(dict1['name'])
 		
-	response1 = requests.get(iconurl1)
-	img1 = Image.open(BytesIO(response1.content)).resize((40, 40))
-	img21 = ImageTk.PhotoImage(img1)
+		label2['textvariable'] = var2.set(str(dict1['main']['temp']) + 'Celcius')
 		
-	label1['textvariable'] = var1.set(dict1['name'])
-	
-	label2['textvariable'] = var2.set(str(dict1['main']['temp']) + 'Celcius')
-	
-	label3['textvariable'] = var3.set(dict1['weather'][0]['description'])
+		label3['textvariable'] = var3.set(dict1['weather'][0]['description'])
 
-	label4['textvariable'] = var4.set('wind: ' + str(dict1['wind']['speed']) + 'm/h')
-	
-	label5['image'] = img21
-	f.close()
+		label4['textvariable'] = var4.set('wind: ' + str(dict1['wind']['speed']) + 'm/h')
+		
+		label5['image'] = img21
+		f.close()
+	except KeyError:
+		pass
 
 
 	
 def get_data(event):
 	try:
-		dic = {1:'Baku', 2:'Seattle'}
 		string = entry.get()
 		with open('weather.txt', 'w') as fil:
 			fil.write(string)
 			fil.close()
 		entry.delete(0,len(string))
 	
-		if string in dic.values():
-			global dict
-			dict = requests.get('https://api.openweathermap.org/data/2.5/weather?q={}&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric'.format(string)).json()
+		global dict
+		dict = requests.get('https://api.openweathermap.org/data/2.5/weather?q={}&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric'.format(string)).json()
 	 
 		iconurl = 'http://openweathermap.org/img/wn/' + dict['weather'][0]['icon'] +'@2x.png'	
 		global img2
