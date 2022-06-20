@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 
 root = Tk()
 root.geometry('400x200')
-root.title('Weather')
+root.title('Current weather')
 
 var1 = StringVar(value = 'loading')	 
 var2 = StringVar(value = 'loading')	
@@ -31,12 +31,15 @@ label4.grid(row=2, column=2)
 label5 = Label(root)
 label5.grid(row = 0, column = 2)
 
-label = Label(root, text = 'Enter location: ')
-label.grid(row = 4, column = 0)
+label6 = Label(root, text = 'Enter location: ')
+label6.grid(row = 6, column = 0)
+
+label7 = Label(root)
+label7.grid(row = 2, column = 1)
 
 var = StringVar()
 entry = Entry(root, textvariable = var)
-entry.grid(row = 4, column = 1)
+entry.grid(row = 6, column = 1)
 
 with open ('weather.txt', 'r') as f:
 	try:
@@ -101,15 +104,22 @@ def update_data():
 	label4['textvariable'] = var4.set('wind: ' + str(dict['wind']['speed']) + 'm/h')
 	
 	label5['image'] = img2
+	
+	label7.config(text = '')
     
 def show_error():
-	label1['textvariable'] = var1.set('Zay Zay')
+	label1['textvariable'] = var1.set('')
+	label1.config(bg = '#d9d9d9')
 
-	label2['textvariable'] = var2.set('Zart Zort Celcius')
+	label2['textvariable'] = var2.set('')
 
-	label3['textvariable'] = var3.set('Neterseng qadang alem')
+	label3['textvariable'] = var3.set('')
 
-	label4['textvariable'] = var4.set('Niye bele oluuuur ? m/h')
+	label4['textvariable'] = var4.set('')
+	
+	label5.config(image = '')
+	
+	label7.config(text = 'Check your connection or spelling')
 	
 	
 entry.bind('<Return>', get_data)
