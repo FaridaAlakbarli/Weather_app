@@ -3,29 +3,25 @@ import json
 from tkinter import *
 from io import BytesIO
 from PIL import Image, ImageTk
+from time import sleep
 
 
 root = Tk()
 root.geometry('400x200')
-root.title('Current weather')
-
-var1 = StringVar(value = 'loading')	 
-var2 = StringVar(value = 'loading')	
-var3 = StringVar(value = 'loading')	
-var4 = StringVar(value = 'loading')	
+root.title('Weather')
 
 
 
-label1 = Label(root, textvariable = var1, bd = 10, bg = '#baf0f7', font = ('Arial', 20))
+label1 = Label(root, text = 'loading', bd = 10, bg = '#baf0f7', font = ('Arial', 20))
 label1.grid(row=0, column=0)
 			
-label2 = Label(root, textvariable = var2, padx = 15, bd = 5)
+label2 = Label(root, text = 'loading', padx = 15, bd = 5)
 label2.grid(row=1, column=0)
 
-label3 = Label(root, textvariable = var3, bd = 5)
+label3 = Label(root, text = 'loading', bd = 5)
 label3.grid(row=1, column=2)
 
-label4 = Label(root, textvariable = var4, padx = 15, bd = 5)
+label4 = Label(root, text = 'loading', padx = 15, bd = 5)
 label4.grid(row=2, column=2)
 
 label5 = Label(root)
@@ -35,7 +31,7 @@ label6 = Label(root, text = 'Enter location: ')
 label6.grid(row = 6, column = 0)
 
 label7 = Label(root)
-label7.grid(row = 2, column = 1)
+label7.grid(row = 2, column =1)
 
 var = StringVar()
 entry = Entry(root, textvariable = var)
@@ -45,24 +41,25 @@ with open ('weather.txt', 'r') as f:
 	try:
 		f1 = f.readline()
 		dict1 = requests.get('https://api.openweathermap.org/data/2.5/weather?q={}&appid=8b5e6c4eeafce928c354244cf1230eb4&units=metric'.format(f1)).json()
-		 
+			 
 
 		iconurl1 = 'http://openweathermap.org/img/wn/' + dict1['weather'][0]['icon'] +'@2x.png'	
-			
+				
 		response1 = requests.get(iconurl1)
 		img1 = Image.open(BytesIO(response1.content)).resize((40, 40))
 		img21 = ImageTk.PhotoImage(img1)
+				
+		label1.config(text = dict1['name'])
+		
+		label2.config(text = str(dict1['main']['temp']) + 'Celcius')
 			
-		label1['textvariable'] = var1.set(dict1['name'])
-		
-		label2['textvariable'] = var2.set(str(dict1['main']['temp']) + 'Celcius')
-		
-		label3['textvariable'] = var3.set(dict1['weather'][0]['description'])
+		label3.config(text = dict1['weather'][0]['description'])
 
-		label4['textvariable'] = var4.set('wind: ' + str(dict1['wind']['speed']) + 'm/h')
-		
+		label4.config(text = 'wind: ' + str(dict1['wind']['speed']) + 'm/h')
+			
 		label5['image'] = img21
 		f.close()
+			
 	except KeyError:
 		pass
 
@@ -86,40 +83,41 @@ def get_data(event):
 		img = Image.open(BytesIO(response.content)).resize((40, 40))
 		img2 = ImageTk.PhotoImage(img)
 		
-			
+		
 		update_data()	
-			
+
 	except:
 		print('aaszm')
 		show_error()
 
     
 def update_data():
-	label1['textvariable'] = var1.set(dict['name'])
+	label1.config(text = dict['name'])
 	
-	label2['textvariable'] = var2.set(str(dict['main']['temp']) + 'Celcius')
+	label2.config(text = str(dict['main']['temp']) + 'Celcius')
 	
-	label3['textvariable'] = var3.set(dict['weather'][0]['description'])
+	label3.config(text = dict['weather'][0]['description'])
 	
-	label4['textvariable'] = var4.set('wind: ' + str(dict['wind']['speed']) + 'm/h')
+	label4.config(text = 'wind: ' + str(dict['wind']['speed']) + 'm/h')
 	
-	label5['image'] = img2
+	label5.config(image = img2)
 	
 	label7.config(text = '')
     
 def show_error():
-	label1['textvariable'] = var1.set('')
-	label1.config(bg = '#d9d9d9')
+	label1.config(text = '')
+	label1.config(bg= '#d9d9d9')
+	
+	label2.config(text = '')
 
-	label2['textvariable'] = var2.set('')
+	label3.config(text = '')
 
-	label3['textvariable'] = var3.set('')
-
-	label4['textvariable'] = var4.set('')
+	label4.config(text = '')
 	
 	label5.config(image = '')
 	
 	label7.config(text = 'Check your connection or spelling')
+	
 	
 	
 entry.bind('<Return>', get_data)
